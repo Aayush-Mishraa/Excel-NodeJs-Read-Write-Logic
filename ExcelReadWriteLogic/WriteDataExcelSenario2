@@ -1,0 +1,34 @@
+const ExcelJS = require('exceljs');
+//ITS SUPPORTS BOTH XLSX AND XLS AND ALSO CSV and JSON
+// Create a new workbook
+
+let output={row:-1, col:-1};
+async function writeExcelFile() {
+
+
+    const workbook = new ExcelJS.Workbook();
+    //this code is aysnchronous so we need to use async and await to read the file
+    //read a excel file
+    await workbook.xlsx.readFile('/Users/aayus/OneDrive/Desktop/Projects/ExcelTestSheet.xlsx')
+
+    // Get a worksheet to the workbook
+    const worksheet = workbook.getWorksheet('Sheet1');
+    //get some data
+    worksheet.eachRow((row, rowNumber) => {
+        //pull  ;; out all the data in the row
+        row.eachCell((cell, colNumber) => {
+            if (cell.value === "Apple") {
+                // console.log(`The value of the cell is "${cell.value}" and the row number is " ${rowNumber} " and the column number is" ${colNumber}"`);
+                output.row = rowNumber;
+                output.col = colNumber;
+            };
+
+        })
+    })
+
+  const cell =  worksheet.getCell(output.row, output.col)
+  cell.value =("Aayush Mishra")
+  await workbook.xlsx.writeFile("/Users/aayus/OneDrive/Desktop/Projects/ExcelTestSheet.xlsx")
+}
+
+writeExcelFile();
